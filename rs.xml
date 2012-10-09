@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wiki2xhp version="2">
+	<meta>
+		<identifier>
+			mytools.presentation.RandomizeSlideShow
+		</identifier>
+		<share_images>
+			True
+		</share_images>
+		<mode>
+			raw
+		</mode>
+		<file_extension>
+			.wiki
+		</file_extension>
+		<wiki/>
+		<out>
+			./help
+		</out>
+		<data>
+			./help_data
+		</data>
+		<html>
+			./help_html
+		</html>
+	</meta>
+	<pages>
+		<node application="randomizeslideshow">
+			<item lang="en" title="Randomized Slide Show"/>
+			<page file_name="index">
+				<item lang="en" name="index" page_title="Index" title="Index"/>
+			</page>
+		</node>
+	</pages>
+</wiki2xhp>

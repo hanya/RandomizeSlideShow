@@ -1,0 +1,1 @@
+Creates custom slide show with randomized slide order.

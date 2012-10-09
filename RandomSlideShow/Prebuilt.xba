@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="Prebuilt" script:language="StarBasic">REM  *****  BASIC  *****
+&apos; Public domain.
+
+Sub Main
+
+End Sub
+
+&apos; Pre-built randomize imple
+
+Sub Randomize_b0e0g1
+  RandomizeCurrentImple(0, 0, 1)
+End Sub
+
+Sub Randomize_b0e1g1
+  RandomizeCurrentImple(0, 1, 1)
+End Sub
+
+Sub Randomize_b1e0g1
+  RandomizeCurrentImple(1, 0, 1)
+End Sub
+
+Sub Randomize_b1e1g1
+  RandomizeCurrentImple(1, 1, 1)
+End Sub
+
+Sub Randomize_b1e1g2
+  RandomizeCurrentImple(1, 1, 2)
+End Sub
+
+Sub Randomize_b2e1g1
+  RandomizeCurrentImple(2, 1, 1)
+End Sub
+
+Sub Randomize_b2e1g2
+  RandomizeCurrentImple(2, 1, 2)
+End Sub
+
+Sub Randomize_b2e2g1
+  RandomizeCurrentImple(2, 2, 1)
+End Sub
+
+Sub Randomize_b2e2g2
+  RandomizeCurrentImple(2, 2, 2)
+End Sub
+
+&apos; Start presentation from first page after randomization
+
+Sub Randomize_b1e0g1_start
+  RandomizeCurrentImple(1, 0, 1, True)
+End Sub
+
+Sub Randomize_b1e1g1_start
+  RandomizeCurrentImple(1, 1, 1, True)
+End Sub
+
+Sub Randomize_b1e1g2_start
+  RandomizeCurrentImple(1, 1, 2, True)
+End Sub
+
+Sub Randomize_b2e1g1_start
+  RandomizeCurrentImple(2, 1, 1, True)
+End Sub
+
+Sub Randomize_b2e1g2_start
+  RandomizeCurrentImple(2, 1, 2, True)
+End Sub
+
+Sub Randomize_b2e2g1_start
+  RandomizeCurrentImple(2, 2, 1, True)
+End Sub
+
+Sub Randomize_b2e2g2_start
+  RandomizeCurrentImple(2, 2, 2, True)
+End Sub
+
+</script:module>

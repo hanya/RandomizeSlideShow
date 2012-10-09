@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="Module1" script:language="StarBasic">REM  *****  BASIC  *****
+&apos; Public domain.
+
+&apos; Creates randomized custom slideshow.
+Sub Main()
+  If CheckFileType() Then
+    StartRandomizeSlideShow()
+  Else
+    msgbox &quot;Only presentation files can be randomized.&quot;
+  End If
+End Sub
+
+&apos; Checks docuemnt type
+Function CheckFileType() As Boolean
+  b = False
+  If HasUnoInterfaces(ThisComponent, &quot;com.sun.star.lang.XServiceInfo&quot;) Then
+    b = ThisComponent.supportsService(_
+        &quot;com.sun.star.presentation.PresentationDocument&quot;)
+  End If
+  CheckFileType = b
+End Function
+
+&apos; Shows dialog
+Sub StartRandomizeSlideShow()
+  oDoc = ThisComponent
+  oDialog = CreateMainDialog(oDoc)
+  
+  If oDialog.execute() Then
+    CreateRandomizedSlideShow(oDoc, oDialog)
+  End If
+  oDialog.dispose()
+End Sub
+
+Const LIB_NAME = &quot;RandomSlideShow&quot;
+Const DIALOG_NAME = &quot;Dialog2&quot;
+Const DEFAULT_NAME = &quot;RandomSlideShow&quot;
+
+Function CreateMainDialog(oDoc As Variant) As Variant
+  DialogLibraries.loadLibrary(LIB_NAME)
+  oDialog = CreateUnoDialog(_
+       DialogLibraries.getByName(LIB_NAME).getByName(DIALOG_NAME))
+  &apos; initialize controls
+  SetControlFocus(oDialog, &quot;text_name&quot;)
+  SelectControlText(oDialog, &quot;text_name&quot;)
+  
+  CreateMainDialog = oDialog
+End Function
+
+
+&apos; Create randomized slide show according to the dialog result
+&apos; @param oDoc document model that supports presentation
+&apos; @param oDialog dialog contains the result after execution
+Sub CreateRandomizedSlideShow(oDoc As Variant, oDialog As Variant)
+  &apos; Read values from dialog
+  sName = GetControlText(oDialog, &quot;text_name&quot;)
+  nSkipBegins = GetControlValue(oDialog, &quot;num_skipbegins&quot;)
+  nSkipEnds = GetControlValue(oDialog, &quot;num_skipends&quot;)
+  nEach = GetControlValue(oDialog, &quot;num_group&quot;)
+  
+  bDefault = GetControlState(oDialog, &quot;check_default&quot;)
+  
+  If nSkipBegins &lt; 0 Then nSkipBegins = 0
+  If nSkipEnds &lt; 0 Then nSkipEnds = 0
+  If nEach &lt; 0 Then nEach = 1
+  
+  CreateRandomizedSlideShowWithArgs(_
+      oDoc, nSkipBegins, nSkipEnds, nEach, sName, bDefault)
+End Sub
+
+&apos; Generate ransomized slide show with args. No dialog shown.
+&apos; @param oDoc document model
+&apos; @param nSkipBegins number of skipped slide at beginning
+&apos; @param nSkipEnds number of skipped slide at ending
+&apos; @param nEach number of slide in each group
+&apos; @param sName (optional) name of custom slide show
+&apos; @param bDefault (optional) set created slide show as default one
+Sub CreateRandomizedSlideShowWithArgs(_
+         oDoc As Variant, _
+         nSkipBegins As Integer, nSkipEnds As Integer, nEach As Integer, _
+         Optional sName As String, Optional bDefault As Boolean)
+  On Error GoTo ErrorHandler
+  If IsMissing(sName) Then sName = DEFAULT_NAME
+  nSlides = oDoc.getDrawPages().getCount()
+  aIndexes = RandomizeSlideIndex(nSlides, nSkipBegins, nSkipEnds, nEach)
+  CreateRandomizedCustomSlideShow(_
+         oDoc, sName, nSkipBegins, nSkipEnds, nEach, aIndexes)
+  If IsMissing(bDefault) Then bDefault = True
+  If bDefault Then
+    oDoc.getPresentation().CustomShow = sName
+  End If
+  Exit Sub
+  ErrorHandler:
+    msgbox &quot;Error: &quot; &amp; &quot;Failed to create randomized slideshow.&quot;
+End Sub
+
+&apos; Generate index array with randomized grop indexes
+&apos; @param nSlides number of slides in the document
+&apos; @param nSkipBegins number of skipped slide at beginning
+&apos; @param nSkipEnds number of skipped slide at ending
+&apos; @param nEach number of slide in each group
+&apos; @return randomized indexes
+Function RandomizeSlideIndex(nSlides, nSkipBegins, nSkipEnds, nEach)
+  nMainSlides = nSlides - nSkipBegins - nSkipEnds
+  If nSlides &gt; 0 AND nMainSlides &gt; 0 Then
+    nGroups = nMainSlides / nEach
+    Dim aIndexes(nGroups -1) As Integer
+    Dim aBaseIndexes(nGroups -1) As Integer
+    For i = 0 To nGroups -1 step 1
+      aBaseIndexes(i) = i
+    Next
+    Randomize
+    For i = 0 to nGroups -1 step 1
+      aIndexes(i) = ArrayPop(aBaseIndexes, _
+                             Int(Rnd() * (UBound(aBaseIndexes) + 1))
+    Next
+  Else
+    aIndexes = Array()
+  End If
+  RandomizeSlideIndex = aIndexes
+End Function
+
+&apos; Pop an element specified by index from array and returned
+&apos; @param a array
+&apos; @param n item index
+&apos; @return removed item
+Function ArrayPop(a, n) As Integer
+  m = a(n)
+  u = UBound(a)
+  If u &gt; 0 Then
+    For i = n To u -1 step 1
+      a(i) = a(i + 1)
+    Next
+    ReDim Preserve a(u -1)
+  Else
+    a = Array()
+  End If
+  ArrayPop = m
+End Function
+
+
+&apos; Create or update custom slideshow
+&apos; @param oDoc document model
+&apos; @param sName name of custom slideshow
+&apos; @param nSkipBegins number of skipped slide at beginning
+&apos; @param nSkipEnds number of skipped slide at ending
+&apos; @param nEach number of slide in each group
+&apos; @param aIndexes randomized group indexes
+Sub CreateRandomizedCustomSlideShow(oDoc, sName, nSkipBegins, nSkipEnds, nEach, aIndexes)
+  oCustoms = oDoc.getCustomPresentations()
+  &apos; Create new custom slideshow, remove if exists
+  If oCustoms.hasByName(sName) Then
+    oCustoms.removeByName(sName)
+  End If
+  oCustom = oCustoms.createInstance(sName)
+  oCustoms.insertByName(sName, oCustom)
+  
+  oDrawPages = oDoc.getDrawPages()
+  nSlides = oDrawPages.getCount()
+  
+  &apos; Insert skipped slides at the beginning
+  If nSkipBegins &gt; 0 Then
+    For i = 0 To nSkipBegins -1 step 1
+      oCustom.insertByIndex(i, oDrawPages.getByIndex(i))
+    Next
+  End If
+  
+  &apos; Insert randomized slides
+  nNextIndex = oCustom.getCount()
+  For i = 0 To UBound(aIndexes) step 1
+    nGroupIndex = aIndexes(i)
+    For j = 0 To nEach -1 step 1
+      nSlideIndex = nSkipBegins + nGroupIndex * nEach + j
+      If nSlides &gt; nSlideIndex Then
+        oCustom.insertByIndex(nNextIndex, oDrawPages.getByIndex(nSlideIndex))
+        nNextIndex = nNextIndex + 1
+      End If
+    Next
+  Next
+  
+  &apos; Insert skipped slides at the end
+  If nSkipEnds &gt; 0 Then
+    j = oCustom.getCount()
+    For i = nSlides - nSkipEnds To nSlides - 1 step 1
+      oCustom.insertByIndex(j, oDrawPages.getByIndex(i))
+      j = j + 1
+    Next
+  End If
+End Sub
+
+
+&apos; Randomize current presentation document with arguments specified.
+&apos; Name of custom slide show is default and set to default presentation.
+&apos; @param nSkipBegins number of skipped slide at beginning
+&apos; @param nSkipEnds number of skipped slide at ending
+&apos; @param nEach number of slide in each group
+&apos; @param bStart start presentation from first page if true
+Sub RandomizeCurrentImple(_
+      nSkipBegins As Integer, nSkipEnds As Integer, nEach As Integer, _
+      Optional bStart As Boolean)
+  CreateRandomizedSlideShowWithArgs(ThisComponent, nSkipBegins, nSkipEnds, nEach)
+  If IsMissing(bStart) Then bStart = False
+  If bStart Then
+    ThisComponent.getCurrentController().setCurrentPage(_
+        ThisComponent.getDrawPages().getByIndex(0))
+    helper = CreateUnoService(&quot;com.sun.star.frame.DispatchHelper&quot;)
+    helper.executeDispatch(_
+        ThisComponent.getCurrentController(), &quot;.uno:Presentation&quot;, &quot;_self&quot;, 0, Array())
+  End If
+End Sub
+
+
+&apos; Functions to get values from dialog controls
+
+&apos; Get text content from the edit field
+Function GetControlText(oDialog, sName) As String
+  GetControlText = oDialog.getControl(sName).getModel().Text
+End Function
+
+&apos; Get state of check box
+Function GetControlState(oDialog, sName) As Boolean
+  GetControlState = oDialog.getControl(sName).getModel().State = 1
+End Function
+
+&apos; Get value from numerical field
+Function GetControlValue(oDialog, sName) As Integer
+  GetControlValue = oDialog.getControl(sName).getModel().Value
+End Function
+
+&apos; Select text in edit field
+Sub SelectControlText(oDialog, sName)
+  aSelection = CreateUnoStruct(&quot;com.sun.star.awt.Selection&quot;)
+  aSelection.Max = 1000
+  oDialog.getControl(sName).setSelection(aSelection)
+End Sub
+
+&apos; Set focus to the control
+Sub SetControlFocus(oDialog, sName)
+  oDialog.getControl(sName).setFocus()
+End Sub
+
+
+
+
+</script:module>

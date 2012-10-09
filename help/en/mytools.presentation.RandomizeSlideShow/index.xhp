@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<helpdocument version="1.0">
+  <meta>
+    <topic id="mytools_presentation_RandomizeSlideShow_" indexer="include">
+      <title xml-lang="en" id="tit"></title>
+      <filename>/mytools.presentation.RandomizeSlideShow/index.xhp</filename>
+    </topic>
+    <history>
+      <created date="2012-10-10T00:10:45"></created>
+      <lastedited date="2012-10-10T00:10:45"></lastedited>
+    </history>
+  </meta><body><bookmark branch="index" id="id_id83882005" xml-lang="en"><bookmark_value>RandomizeSlideShow</bookmark_value></bookmark><bookmark branch="hid/mytools.presentation.RandomizeSlideShow:index" id="bk_id01890057_bookmarks" xml-lang="en"><bookmark_value xml-lang="en">RandomizeSlideShow</bookmark_value></bookmark><paragraph id="hd_id58199607" level="1" role="heading" xml-lang="en">Randomize Slide Show</paragraph><paragraph id="par_id53819795" role="paragraph" xml-lang="en">This extension provides way to create custom slide show in randomized slide order. Additionally the following functions are provided: </paragraph><list format="1" type="unordered"><listitem> not randomize slides at beggining</listitem><listitem> not randomize slides at ending</listitem><listitem> randomize sequential slides as group</listitem></list><paragraph id="hd_id49982472" level="2" role="heading" xml-lang="en">Install</paragraph><paragraph id="par_id53829795" role="paragraph" xml-lang="en">Install OXT package through the extension manager and then restart your office.</paragraph><paragraph id="hd_id49983472" level="2" role="heading" xml-lang="en">Usage</paragraph><paragraph id="par_id53839795" role="paragraph" xml-lang="en">This small extension can be used as follows:</paragraph> <list bullet="disc" type="ordered"><listitem> Open your presentation file.</listitem><listitem> Choose Tools - Add-Ons - Randomize Slide Show, Randomize Slide Show dialog is opened.</listitem><listitem> Fill values and push OK to randomize.</listitem></list><paragraph id="par_id53859795" role="paragraph" xml-lang="en">After the above procedure, new custom slideshow with randomized slide order is created. If it is set as default slide show on Slide Show - Slide Show Settings dialog in the main menu, it can be started through Slide Show - Slid Show entry.</paragraph><list format="1" type="unordered"><listitem> Custom slide show name: shown in the list of custom slide show. If named one is already exists, simply replaced.</listitem><listitem> Skip slides from beginning: number of slides not randomize as starting pages</listitem><listitem> Skip slides at ending: number of slides not randomize as ending pages</listitem><listitem> Each: number of slides as group to randomize</listitem><listitem> Set to default slide show: created custom slide show can be started by Slide Show menu entry</listitem></list><paragraph id="par_id53869795" role="paragraph" xml-lang="en">If the slide show is randomized without setting to skip first slide, you may see funny running the slide show depends on the state of the following option. There is an option, "Always with current page" in Tools - Options - OpenOffice Impress - General - Start presentation entry. If first page is placed in the middle of the slide order and the slide show is started from current page, the slide show is started from about the middle of the slide sequence because of the above option. Please add title page and skip to randomize it or set the option disabled.</paragraph><paragraph id="hd_id49984472" level="2" role="heading" xml-lang="en">Macros</paragraph><paragraph id="par_id53879795" role="paragraph" xml-lang="en">Defined macros can be used to randomize slide order without the dialog. This can be used to randomize slides with defined parameters. This is useful for assiginig to button or actions that can be used by the user of the presentation.</paragraph><paragraph id="par_id53889795" role="paragraph" xml-lang="en">RandomizeSlideShow.Module1.RandomizeCurrentImple routine can be used to randomize current presentation document.</paragraph><paragraph id="par_id05060388" role="code" xml-lang="en">' Randomize current presentation document with arguments specified.<br />
+' Name of custom slide show is default and set to default presentation.<br />
+' @param nSkipBegins number of skipped slide at beginning<br />
+' @param nSkipEnds number of skipped slide at ending<br />
+' @param nEach number of slide in each group<br />
+' @param bStart start presentation from first page if true<br />
+Sub RandomizeCurrentImple(_<br />
+     nSkipBegins As Integer, nSkipEnds As Integer, nEach As Integer, _<br />
+     Optional bStart As Boolean)<br />
+</paragraph><paragraph id="par_id53199795" role="paragraph" xml-lang="en">This macro can be called as follows: </paragraph><paragraph id="par_id65776074" role="code" xml-lang="en">Sub PreparedRandomization<br />
+ ' the library should be loaded before to use its functions<br />
+ GlobalScope.BasicLibraries.loadLibrary("RandomizeSlideShow")<br />
+ ' skip first two slides and ending two slides, grouping each two slides.<br />
+ ' and start the presentation from first page after randomization<br />
+ RandomizeCurrentImple(2, 2, 2, True)<br />
+End Sub<br /><br />
+</paragraph><paragraph id="par_id53899795" role="paragraph" xml-lang="en">RandomizeSlideShow.Module2 module contains several pre-built macros to randomize slides order. They are named with prefix Randomize_ and remained part indicates parameters. Randomize_b1e1g2 means skip first page and last page and group two slide each. The routines with _start suffix starts the presentation after the randomization with parameters.</paragraph><paragraph id="hd_id49981472" level="2" role="heading" xml-lang="en">License</paragraph><paragraph id="par_id53809795" role="paragraph" xml-lang="en">Public domain.</paragraph></body>
+</helpdocument>

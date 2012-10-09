@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dlg:window PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "dialog.dtd">
+<dlg:window xmlns:dlg="http://openoffice.org/2000/dialog" xmlns:script="http://openoffice.org/2000/script" dlg:id="Dialog2" dlg:left="126" dlg:top="60" dlg:width="186" dlg:height="198" dlg:closeable="true" dlg:moveable="true" dlg:title="Randomize Slide Show">
+ <dlg:bulletinboard>
+  <dlg:text dlg:id="Label3" dlg:tab-index="7" dlg:left="8" dlg:top="55" dlg:width="93" dlg:height="16" dlg:value="Skip slides from beggining"/>
+  <dlg:text dlg:id="Label4" dlg:tab-index="8" dlg:left="8" dlg:top="74" dlg:width="93" dlg:height="16" dlg:value="Skip slide at ending"/>
+  <dlg:numericfield dlg:id="num_skipbegins" dlg:tab-index="1" dlg:left="132" dlg:top="54" dlg:width="47" dlg:height="16" dlg:decimal-accuracy="0" dlg:value="0" dlg:value-min="0" dlg:spin="true" dlg:repeat="50"/>
+  <dlg:numericfield dlg:id="num_skipends" dlg:tab-index="2" dlg:left="132" dlg:top="74" dlg:width="47" dlg:height="16" dlg:decimal-accuracy="0" dlg:value="0" dlg:value-min="0" dlg:spin="true" dlg:repeat="50"/>
+  <dlg:checkbox dlg:id="check_default" dlg:tab-index="4" dlg:left="8" dlg:top="154" dlg:width="139" dlg:height="16" dlg:value="~Set to default slide show" dlg:checked="true"/>
+  <dlg:textfield dlg:id="text_name" dlg:tab-index="0" dlg:left="8" dlg:top="16" dlg:width="111" dlg:height="16" dlg:value="RandomSlideShow"/>
+  <dlg:text dlg:id="Label6" dlg:tab-index="9" dlg:left="8" dlg:top="112" dlg:width="72" dlg:height="16" dlg:value="Each"/>
+  <dlg:numericfield dlg:id="num_group" dlg:tab-index="3" dlg:left="132" dlg:top="112" dlg:width="47" dlg:height="16" dlg:decimal-accuracy="0" dlg:value="1" dlg:value-min="0" dlg:spin="true" dlg:repeat="50"/>
+  <dlg:button dlg:id="btn_help" dlg:tab-index="14" dlg:left="4" dlg:top="174" dlg:width="50" dlg:height="17" dlg:value="Help" dlg:button-type="help" dlg:help-url="mytools.presentation.RandomizeSlideShow:index"/>
+  <dlg:button dlg:id="btn_ok" dlg:tab-index="5" dlg:left="68" dlg:top="175" dlg:width="50" dlg:height="17" dlg:value="OK" dlg:button-type="ok"/>
+  <dlg:button dlg:id="btn_cancel" dlg:tab-index="6" dlg:left="132" dlg:top="175" dlg:width="50" dlg:height="17" dlg:value="Cancel" dlg:button-type="cancel"/>
+  <dlg:fixedline dlg:id="line_name" dlg:tab-index="10" dlg:left="4" dlg:top="0" dlg:width="178" dlg:height="13" dlg:value="Custom slide show name"/>
+  <dlg:fixedline dlg:id="line_skip" dlg:tab-index="11" dlg:left="4" dlg:top="39" dlg:width="178" dlg:height="13" dlg:value="Skip slides"/>
+  <dlg:fixedline dlg:id="line_group" dlg:tab-index="12" dlg:left="4" dlg:top="96" dlg:width="178" dlg:height="13" dlg:value="Slide grouping"/>
+  <dlg:fixedline dlg:id="line_options" dlg:tab-index="13" dlg:left="4" dlg:top="137" dlg:width="178" dlg:height="13" dlg:value="Options"/>
+ </dlg:bulletinboard>
+</dlg:window>
